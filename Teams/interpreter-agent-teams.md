@@ -28,27 +28,22 @@ description: Learn how to manage Interpreter agent in Microsoft Teams to provide
 
 **APPLIES TO:** ![Image of a checkmark for yes](/office/media/icons/success-teams.png) Meetings ![Image of a x for no](/office/media/icons/cancel-teams.png) Webinars ![Image of a x for no](/office/media/icons/cancel-teams.png) Town halls
 
-> [!IMPORTANT]
-> This feature is currently in Teams Public preview.
->
-> Features in preview might not be complete and could undergo changes before becoming available in the public release. They're provided for evaluation and exploration purposes only.
+Interpreter agent acts as a translator in Microsoft Teams meetings, allowing participants with a Microsoft 365 Copilot license to listen to the meeting in their chosen language. Interpreter listens to the spoken language in the meeting and translates it into another language in real-time, allowing participants who speak different languages to understand each other and collaborate effectively. To represent their voices, participants can choose to have Interpreter **simulate their own voice** when translating to others or select one of the following **preset automated voices**:  Ava (female), Andrew (male), Fable Turbo (neutral). If an automated voice is selected, **Ava is the default.**
 
-Interpreter agent acts as a translator in Microsoft Teams meetings, allowing participants with a Microsoft 365 Copilot license to listen to the meeting in their chosen language. Interpreter listens to the spoken language in the meeting and translates it into another language in real-time, allowing participants who speak different languages to understand each other and collaborate effectively. To represent their voices, participants can choose to have Interpreter simulate their own voice when translating to others or select one of the following preset automated voices:  Voice 1 (female), Voice 2 (male), Voice 3 (neutral).
-
-As an admin, you can control whether your organization can use Interpreter and select the default setting for voice representation.
+As an admin, you can control whether your organization can use Interpreter and select the default voice option for how users' speech is heard by others.
 
 To learn more about the Interpreter experience in meetings, see [Interpreter in Microsoft Teams meetings](https://support.microsoft.com/office/interpreter-in-microsoft-teams-meetings-c7efe2bb-535d-42ab-a5c4-d2d91619b46d).
 
 ## Supported languages
 
-Interpreter supports the following languages for speaking and listening: Chinese (Mandarin), English, French, German, Italian, Japanese, Korean, Portuguese (Brazil), Spanish.
+Interpreter supports the following languages for speaking and listening: Chinese (Mandarin), English, French, German, Italian, Japanese, Korean, Portuguese, Spanish.
 
-## Prerequisites and licensing for Public preview
+## Prerequisites and licensing
 
 The following list contains the prerequisites for users to access Interpreter in Teams meetings. Users must meet all the following requirements:
 
-> [!NOTE]
-> We'll update the licensing requirements for General availability. Check back soon for updates.
+> [!IMPORTANT]
+> Interpreter agent is available as part of the Microsoft 365 Copilot license. **A Microsoft M365 license are required** to listen to others’ speech through the Interpreter agent. To get access to Microsoft 365 Copilot, contact your IT admin. 
 
 - An eligible *Microsoft 365* base license.
   - For the list of eligible base licenses, see [Understand licensing requirements for Microsoft 365 Copilot](/copilot/microsoft-365/microsoft-365-copilot-licensing).
@@ -56,8 +51,6 @@ The following list contains the prerequisites for users to access Interpreter in
   - Teams licenses might be included in your *Microsoft 365* subscription, or you might need to purchase a separate Teams license if you have *Microsoft 365 (no Teams)* licenses.
 - A *Microsoft 365 Copilot* license.
   - For information on how to acquire *Microsoft 365 Copilot* licenses, see [Where can I get Microsoft Copilot?](https://support.microsoft.com/topic/where-can-i-get-microsoft-copilot-40a622db-6d25-4266-b008-4bbcb55cf52f)
-- Be a Microsoft Teams Public preview participant.
-  - For information on how to access Teams Public preview features, see [Microsoft Teams Public preview](/microsoftteams/public-preview-doc-updates).
   
 ## Data, security, and privacy
 
@@ -75,14 +68,13 @@ Here's how it works:
 
 ### How Interpreter uses your users' voices
 
-When a user turns on voice simulation in the Interpreter, other participants hear the translated speech in the speaker’s own voice.
+**Voice simulation** generates translated speech in your own voice, allowing other participants to hear translations as if you're speaking their language directly. When you turn on this feature in Interpreter, the system briefly analyzes short segments of your speech **on the fly** (in real-time) to simulate your unique tone, style, and voice characteristics. **Voice samples or biometric data are never stored.** AI instantly creates a natural-sounding voice in the selected language, preserving your authentic tone, pitch, and speaking style without exaggerating emotions. This ensures a familiar and seamless multilingual conversation experience.
 
-Here's how it works:
-
-1. **Admin policy**- To set the default value for **Your voice representation** to **Simulate my voice** for all users in your organization, you use the **`-VoiceSimulationInInterpreter`** parameter.
-2. **User Interpreter settings**- Users can choose whether to use voice simulation during meetings.
-3. **Privacy-first design**- The system samples brief segments of the speaker’s voice to simulate their tone, style, and voice characteristics in real-time, without storing biometric data. It preserves the speaker's natural tone, pitch, and style, without exaggerating emotions.
-4. **Voice simulation**- AI generates a simulated voice in the selected language for seamless end-to-end translation.
+**Real-time processing without storing voice data**
+Voice data is processed immediately, entirely on the fly, without ever storing your voice samples or biometric information. The following diagram illustrates this real-time and secure processing:
+- Original audio streams are briefly analyzed by the system in real-time.
+- ACS Speech services instantly provide translated speech simulation.
+- No voice samples or biometric data are retained after processing.
 
 :::image type="content" source="media/interpreter-agent-diagram-small.png" alt-text="Architecture diagram of language media processing to ACS speech." lightbox="media/interpreter-agent-diagram-expand.png":::
 
@@ -108,23 +100,23 @@ To turn on Interpreter for your entire organization, use the following script:
 Set-CsTeamsMeetingPolicy -Identity <policy name> -AIInterpreter Enabled
 ```
 
-### Set the default value for voice representation
+### Set the default value for how users can set their preference for how others hear their speech via Interpreter
 
-The org-wide **`-VoiceSimulationInInterpreter`** parameter controls your users' default value for **Your voice representation** in **Interpreter settings**. The **Your voice representation** setting controls how a user's voice is represented to other participants. **By default, this parameter is set to disabled.**
+The org-wide **`-VoiceSimulationInInterpreter`** parameter controls your users' default value for **Chose your voice when interpreted** in **Interpreter settings**. The **Chose your voice when interpreted** setting controls how a user's voice is represented to other participants. **By default, this parameter is set to enabled.**
 
 Here's the user experience for Interpreter depending on the value you choose:
 
-- **Enabled**: Sets the default value for **Your voice representation** to **Simulate my voice**. When users turn on Interpreter, it automatically simulates their voices when translating to others in meetings. Users can also select an automated voice.
+- **Enabled**: Sets the default value for **Chose your voice when interpreted** to **Simulate my voice**. When users with a Microsoft 365 Copilot licesne turn on Interpreter, it automatically simulates their voices when translating to others in meetings. All participants in an Interpreter-enabled meeting can also select an automated voice. **This is the default value.**
 
-- **Disabled**: Sets the default value for **Your voice representation** to **Automated voice**. When users turn on Interpreter, they select one of the automated voices for translation. Users can also choose to allow Interpreter to simulate their voice. **This is the default value.**
+- **Disabled**: Sets the default value for **Chose your voice when interpreted** to **Automated voice**. When users with a Microsoft 365 Copilot licesne turn on Interpreter, by deafult, Ava (female) option is selected by default among the automated voices. All participants in an Interpreter-enabled meeting can select another automated voice or choose to have Interpreter simulate their own voice. 
 
-To set the org-wide default value for the **Your voice representation** setting to **Simulate my voice**, use the following script:  
+To set the org-wide default value for the **Chose your voice when interpreted** setting to **Simulate my voice**, use the following script:  
 
 ```PowerShell
 Set-CsTeamsMeetingPolicy -Identity <policy name> -VoiceSimulationInInterpreter Enabled
 ```
 
-To set the org-wide default value for the **Your voice representation** setting to **Automated voice**, use the following script:
+To set the org-wide default value for the **Chose your voice when interpreted** setting to **Automated voice**, use the following script:
 
 ```PowerShell
 Set-CsTeamsMeetingPolicy -Identity <policy name> -VoiceSimulationInInterpreter Disabled
@@ -138,7 +130,7 @@ Interpreter is supported on the following platforms and clients:
 
 - Teams desktop (Windows and Mac)
 - Teams mobile (iOS and Android)
-- Teams web (Chrome, Microsoft Edge, and Firefox)
+- Teams web (Chrome, Microsoft Edge, Safari, and Firefox)
 - Scheduled meetings
 - Channel meetings
 - Virtual Desktop Infrastructure (VDI)
